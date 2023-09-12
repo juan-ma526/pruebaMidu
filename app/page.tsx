@@ -29,10 +29,8 @@ const books: Book[] = data.library.map((data) => data.book);
 
 export default function Home({ searchParams: { genre } }: Props) {
   const matches: Book[] = books.filter((book) => book.genre === genre);
+  const [favoritos, setFavoritos] = useState<string[]>([]);
   const [enFavoritos, setEnFavoritos] = useState(false);
-  const favoritos: string[] = JSON.parse(
-    localStorage.getItem("favorites") || "[]"
-  );
 
   const handleSubmit = (idMovie: string | undefined) => {
     let updatedFavoritos: string[] = [...favoritos];
@@ -45,9 +43,25 @@ export default function Home({ searchParams: { genre } }: Props) {
         updatedFavoritos.push(idMovie);
       }
       localStorage.setItem("favorites", JSON.stringify(updatedFavoritos));
+      setFavoritos(updatedFavoritos);
     }
     setEnFavoritos(!enFavoritos);
   };
+
+  // Escuchar el evento "storage"
+  useEffect(() => {
+    const storageEventListener = (event: StorageEvent) => {
+      if (event.key === "favorites") {
+        setFavoritos(JSON.parse(event.newValue || "[]"));
+      }
+    };
+
+    window.addEventListener("storage", storageEventListener);
+
+    return () => {
+      window.removeEventListener("storage", storageEventListener);
+    };
+  }, []);
 
   return (
     <div className="flex flex-wrap justify-center items-center m-auto">

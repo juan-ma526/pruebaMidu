@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+  const router = useRouter();
   return (
     <nav className="text-white w-full h-9 mb-3 px-2 py-2">
       <ul className="flex gap-6 w-auto h-auto ">
@@ -35,12 +37,12 @@ export default function Navbar() {
               </Link>
             </li>
             <li
-              // onClick={() => handleClick("Terror")}
+              onClick={() => router.push("/genero/Terror")}
               className="hover:bg-gray-500 px-7 hover:text-white"
             >
-              <Link href={{ pathname: "/", query: { genre: "Terror" } }}>
-                Terror
-              </Link>
+              {/* <Link href={{ pathname: "/", query: { genre: "Terror" } }}> */}
+              Terror
+              {/* </Link> */}
             </li>
           </ul>
         </ul>
